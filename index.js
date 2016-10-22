@@ -4,10 +4,12 @@ class Shiny{
     /**
      * @param API_KEY
      * @param API_SECRET_KEY
+     * @param API_HOST
      */
-    constructor(API_KEY, API_SECRET_KEY){
+    constructor(API_KEY, API_SECRET_KEY, API_HOST = 'https://shiny.kotori.moe'){
         this.API_KEY = API_KEY;
         this.API_SECRET_KEY = API_SECRET_KEY;
+        this.API_HOST = API_HOST;
     }
 
     /**
@@ -22,7 +24,7 @@ class Shiny{
         let event_string = JSON.stringify(data);
         let event = {
             "spiderName": spiderName,
-            "level": level,
+            "level": parseInt(level),
             "data": event_string
         };
         if (hash){
@@ -45,7 +47,7 @@ class Shiny{
 
         return new Promise((resolve, reject) => {
             request.post({
-                url: 'https://shiny.kotori.moe/Data/add',
+                url: this.API_HOST + '/Data/add',
                 form: payload
             }, (error, httpResponse, body)=>{
                 if (error || httpResponse.statusCode !== 200){
@@ -64,7 +66,7 @@ class Shiny{
      */
     recent(){
         return new Promise((resolve, reject)=>{
-            request('https://shiny.kotori.moe/Data/recent', (error, response, body)=>{
+            request(this.API_HOST + '/Data/recent', (error, response, body)=>{
                 if (response.statusCode === 200){
                     var list = JSON.parse(body).data;
                     resolve(list);
