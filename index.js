@@ -28,7 +28,7 @@ class Shiny{
             "data": event_string
         };
         if (hash){
-            event.hash = hash;
+            event.hash = hash.toString();
         }
         else{
             let md5 = crypto.createHash('md5');
