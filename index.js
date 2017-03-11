@@ -1,5 +1,11 @@
-var crypto = require('crypto');
-var request = require('request');
+/**
+ * Shiny JavaScript SDK
+ * 
+ * @author: Eridanus Sora <sora@sound.moe>
+ */
+let crypto = require('crypto');
+let request = require('request');
+
 class Shiny{
     /**
      * @param API_KEY
@@ -72,7 +78,7 @@ class Shiny{
                     resolve(list);
                 }
                 else{
-                    reject(response.statusCode);
+                    reject(response);
                 }
             })
         })
