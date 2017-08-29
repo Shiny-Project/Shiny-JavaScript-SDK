@@ -18,6 +18,12 @@ class Shiny{
         this.API_HOST = API_HOST;
     }
 
+    static sha1(text){
+        let sha1 = crypto.createHash('sha1');
+        sha1.update(text);
+        return sha1.digest('hex');
+    }
+
     /**
      * 添加项目
      * @param spiderName
@@ -43,11 +49,9 @@ class Shiny{
         }
 
         // 开始签名
-        let sha1 = crypto.createHash('sha1');
-        sha1.update(this.API_KEY + this.API_SECRET_KEY + JSON.stringify(event));
         let payload = {
             "api_key": this.API_KEY,
-            "sign": sha1.digest('hex'),
+            "sign": Shiny.sha1(this.API_KEY + this.API_SECRET_KEY + JSON.stringify(event)),
             "event": JSON.stringify(event)
         };
 
@@ -73,6 +77,23 @@ class Shiny{
     recent(){
         return new Promise((resolve, reject)=>{
             request(this.API_HOST + '/Data/recent', (error, response, body)=>{
+                if (response.statusCode === 200){
+                    var list = JSON.parse(body).data;
+                    resolve(list);
+                }
+                else{
+                    reject(response);
+                }
+            })
+        })
+    }
+    
+    /**
+     * 获得爬虫任务
+     */
+    getJobs(){
+        return new Promise((resolve, reject) => {
+            request(`${this.API_HOST}/Spider/jobs?api_key=${this.API_KEY}&sign=${Shiny.sha1(this.API_KEY + this.API_SECRET_KEY)}`, (err, response, body) => {
                 if (response.statusCode === 200){
                     var list = JSON.parse(body).data;
                     resolve(list);
