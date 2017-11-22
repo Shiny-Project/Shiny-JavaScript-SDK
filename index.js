@@ -37,7 +37,7 @@ class Shiny{
         let event = {
             "spiderName": spiderName,
             "level": parseInt(level),
-            "data": event_string
+            "data": data
         };
         if (hash){
             event.hash = hash.toString();
@@ -61,7 +61,7 @@ class Shiny{
                 form: payload
             }, (error, httpResponse, body)=>{
                 if (error || httpResponse.statusCode !== 200){
-                    reject(httpResponse.statusCode);
+                    reject(httpResponse.statusCode, httpResponse);
                 }
                 else{
                     resolve(body);
